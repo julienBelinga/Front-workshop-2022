@@ -17,6 +17,8 @@
         $sql = "INSERT INTO worktime (`start_time`) VALUES (`".time()."`)";
         $result = $dbh->prepare($sql);
 		$result->execute();
+
+        $_SESSION['begin'] = false;
     }
 
     function fin(){
@@ -34,16 +36,16 @@
         $sql = "UPDATE INTO worktime `end_time`,`time` VALUES `".$end_time."`, `".$time."` WHERE fk_user = 1";
         $result = $dbh->prepare($sql);
 		$result->execute();
+
+        $_SESSION['begin'] = true;
     }
 
     function clickbtn(){
-        $_SESSION['click'] = $_SESSION['click'];
-        if($_SESSION['click'] % 2 == 0){
-            fin();
-        }else{
+        $_SESSION['begin'] = $_SESSION['begin'];
+        if($_SESSION['begin']){
             debut();
+        }else{
+            fin();
         }
-        
-        $_SESSION['click'] += 1;
     }
 ?>

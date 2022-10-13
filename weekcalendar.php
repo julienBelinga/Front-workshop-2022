@@ -2,9 +2,6 @@
 <?php 
 session_start();
 require('query.php');
-$_SESSION['click'] = 1;
-
-var_dump($_SESSION['click']);
 ?>
 <html>
 <head>
@@ -17,6 +14,7 @@ var_dump($_SESSION['click']);
   body {
     font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
     margin: 0;
+    padding-top: 15px;
   }
 
   h1 {
@@ -109,7 +107,7 @@ var_dump($_SESSION['click']);
 </head>
 <body>
   <header>
-    <a id="badge" class="" style="padding: 15px; margin: 15px;" href="<?php clickbtn(); ?>">BADGE</a>
+    <a id="badge" class="" style="padding: 15px; margin: 15px; text-decoration: none; color:#000; border:solid 1px #000;" href="badge.php">BADGE</a>
   </header>
   <h1>Calendar</h1>
 

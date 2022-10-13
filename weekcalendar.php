@@ -1,8 +1,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<?php 
+session_start();
+require('query.php');
+$_SESSION['click'] = 1;
+?>
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-  <title>Demo 4 - jQuery Week Calendar</title>
+  <title>Calendar</title>
 
   <link rel='stylesheet' type='text/css' href='libs/css/smoothness/jquery-ui-1.8.11.custom.css' />
   <link rel='stylesheet' type='text/css' href='jquery.weekcalendar.css' />
@@ -14,12 +19,13 @@
 
   h1 {
     margin: 0 0 1em;
-    padding: 0.5em 0.5em 0;
+    padding: 0.5em;
   }
 
   p.description {
     font-size: 0.8em;
     padding: 1em;
+    position: absolute;
     top: 3.2em;
     margin-right: 400px;
   }
@@ -42,7 +48,6 @@
 
   <script type="text/javascript" src="libs/date.js"></script>
   <script type='text/javascript' src='jquery.weekcalendar.js'></script>
-
   <script type='text/javascript'>
   var year = new Date().getFullYear();
   var month = new Date().getMonth();
@@ -50,34 +55,27 @@
 
   var eventData = {
     events : [
-       {'id':1, 'start': new Date(year, month, day, 12), 'end': new Date(year, month, day, 13, 35),'title':'Lunch with Mike'},
-       {'id':2, 'start': new Date(year, month, day, 14), 'end': new Date(year, month, day, 14, 45),'title':'Dev Meeting'},
-       {'id':3, 'start': new Date(year, month, day + 1, 18), 'end': new Date(year, month, day + 1, 18, 45),'title':'Hair cut'},
-       {'id':4, 'start': new Date(year, month, day - 1, 8), 'end': new Date(year, month, day - 1, 9, 30),'title':'Team breakfast'},
-       {'id':5, 'start': new Date(year, month, day + 1, 14), 'end': new Date(year, month, day + 1, 16),'title':'Product showcase'},
-       {'id':5, 'start': new Date(year, month, day + 1, 15), 'end': new Date(year, month, day + 1, 17),'title':'Overlay event'}
+      {'id':1, 'start': new Date(year, month, day, 12), 'end': new Date(year, month, day, 13, 35),'title':'Lunch with Mike'},
+      {'id':2, 'start': new Date(year, month, day, 14), 'end': new Date(year, month, day, 14, 45),'title':'Dev Meeting'},
+      {'id':3, 'start': new Date(year, month, day + 1, 18), 'end': new Date(year, month, day + 1, 18, 45),'title':'Hair cut'},
+      {'id':4, 'start': new Date(year, month, day - 1, 8), 'end': new Date(year, month, day - 1, 9, 30),'title':'Team breakfast'},
+      {'id':5, 'start': new Date(year, month, day + 1, 14), 'end': new Date(year, month, day + 1, 15),'title':'Product showcase'}
     ]
   };
 
   $(document).ready(function() {
     $('#calendar').weekCalendar({
+      timeslotsPerHour: 6,
+      timeslotHeigh: 30,
+      hourLine: true,
       data: eventData,
-
-      timeslotsPerHour: 4,
-      allowCalEventOverlap: true,
-      overlapEventsSeparate: true,
-      totalEventsWidthPercentInOneColumn : 95,
-
       height: function($calendar) {
         return $(window).height() - $('h1').outerHeight(true);
       },
-      eventRender: function(calEvent, $event) {
+      eventRender : function(calEvent, $event) {
         if (calEvent.end.getTime() < new Date().getTime()) {
           $event.css('backgroundColor', '#aaa');
-          $event.find('.time').css({
-            backgroundColor: '#999',
-            border:'1px solid #888'
-          });
+          $event.find('.time').css({'backgroundColor': '#999', 'border':'1px solid #888'});
         }
       },
       eventNew: function(calEvent, $event) {
@@ -110,19 +108,16 @@
 
     $('<div id="message" class="ui-corner-all"></div>').prependTo($('body'));
   });
-  </script>
+
+</script>
 </head>
 <body>
-  <h1>Week Calendar Demo</h1>
+  <header>
+    <a id="badge" class="" style="padding: 15px; margin: 15px;" href="<?php clickbtn(); ?>">BADGE</a>
+  </header>
+  <h1>Calendar</h1>
 
-  <p class="description">
-    This calendar demonstrates a basic calendar. Events triggered are
-    displayed in the message area. Appointments in the past are shaded grey.
-    <br/>
-    This calendar demonstrates overlapped events with little space on right to
-    create new events  (new option <i>"totalEventsWidthPercentInOneColumn"</i>)
-  </p>
+  <div id='calendar'></div>
 
-  <div id="calendar"></div>
 </body>
 </html>

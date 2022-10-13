@@ -1,65 +1,38 @@
 <?php
 
-// $servername = "localhost";
-// $username = "root";
-// $password = "";
-// $dbname = "workshop2022";
+    function connect(){
+        $dsn = 'mysql:dbname=workshop2022;host=127.0.0.1';
+        $user = 'root';
+        $password = '';
 
-// // Create connection
-// $conn = new mysqli($servername, $username, $password, $dbname);
+        $dbh = new PDO($dsn, $user, $password);
 
-// // Check connection
-// if ($conn->connect_error) {
-//   die("Connection failed: " . $conn->connect_error);
-// }
-
-$host = '127.0.0.1';
-$db   = 'workshop2022';
-$user = 'root';
-$pass = '';
-$port = "3306";
-$charset = 'utf8mb4';
-
-$options = [
-    \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
-    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-    \PDO::ATTR_EMULATE_PREPARES   => false,
-];
-
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset;port=$port";
-
-try {
-    $pdo = new \PDO($dsn, $user, $pass, $options);
-} catch (\PDOException $e) {
-    throw new \PDOException($e->getMessage(), (int)$e->getCode());
-}
+        return $dbh;
+    }
 
     function debut(){
+        $dbh = connect();
         // prepare and bind
-        $sql = "INSERT INTO worktime `start_time`,`fk_user` VALUES `".$start_time."`,`".$fk_user."`;
-        $result = $db->prepare($sql);
+        $sql = "INSERT INTO worktime `start_time`,`fk_user` VALUES `".time()."`,`1`";
+        $result = $dbh->prepare($sql);
 		$result->execute();
-
-        // set parameters and execute
-        $start_time = time();
-        $fk_user = 1;
-        $stmt->execute();
     }
 
     function fin(){
+        $dbh = connect();
 
-        // prepare and bind
-        $stmt = $conn->prepare("SELECT worktime `start_time` WHERE fk_user = 1");
-        $stmt->execute();
+        //SELECT query to get start_time
+        $sql = "SELECT worktime `start_time` WHERE fk_user = 1";
+        $result = $dbh->prepare($sql);
+		$start_time = $result->execute();
 
-        // prepare and bind
-        $stmt = $conn->prepare("UPDATE INTO worktime (end_time,time) VALUES (?,?) WHERE fk_user = 1");
-        $stmt->bind_param("s",$start_time);
-
-        // set parameters and execute
         $end_time = time();
         $time = $end_time - $start_time;
-        $stmt->execute();
+        
+        // set parameters
+        $sql = "UPDATE INTO worktime `end_time`,`time` VALUES `".$end_time."`, `".$time."` WHERE fk_user = 1";
+        $result = $dbh->prepare($sql);
+		$result->execute();
     }
 
     function clickbtn(){

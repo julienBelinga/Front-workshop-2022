@@ -12,8 +12,9 @@
 
     function debut(){
         $dbh = connect();
+        
         // prepare and bind
-        $sql = "INSERT INTO worktime `start_time`,`fk_user` VALUES `".time()."`,`1`";
+        $sql = "INSERT INTO worktime (`start_time`) VALUES (`".time()."`)";
         $result = $dbh->prepare($sql);
 		$result->execute();
     }
@@ -37,10 +38,12 @@
 
     function clickbtn(){
         $_SESSION['click'] = $_SESSION['click'];
-        if($_SESSION['click'] % 2 == 0)
-            debut();
-        else
+        if($_SESSION['click'] % 2 == 0){
             fin();
+        }else{
+            debut();
+        }
+        
         $_SESSION['click'] += 1;
     }
 ?>
